@@ -1,4 +1,4 @@
-import * as storage from "./storage.js";
+import * as storage from "./utils/storage.js";
 import create from "./utils/create.js";
 import language from "./layouts/index.js";
 import Key from "./Key.js";
@@ -32,24 +32,9 @@ export default class Keyboard {
       ["autocorrect", "off"]
     );
 
-    const hideBtn = create("button", "hide", null, main);
-    hideBtn.textContent = "Hide";
-    hideBtn.addEventListener("click", function (e) {
-      document.querySelector(".keyboard").classList.toggle("hidden");
-      if (e.target.textContent === "Hide") {
-        e.target.textContent = "Show";
-        cntrlRow.style.display = "none";
-      } else {
-        e.target.textContent = "Hide";
-        cntrlRow.style.display = "flex";
-      }
-    });
-
-    const langBtn = create("button", "lang");
+    const langBtn = create("button", "lang", null, main);
     langBtn.textContent = langCode.toUpperCase();
     langBtn.addEventListener("click", this.switchLanguage);
-
-    const cntrlRow = create("div", "cntrlRow", langBtn, main);
 
     this.container = create("div", "keyboard", null, main, [
       "language",
@@ -103,7 +88,6 @@ export default class Keyboard {
     this.output.focus();
 
     if (type.match(/keydown|mousedown/)) {
-      if (this.getSound()) this.processSounds(code);
       if (!type.match(/mouse/)) e.preventDefault();
 
       if (this.shiftKey) this.switchUpperCase(true);
